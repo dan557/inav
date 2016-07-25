@@ -567,6 +567,7 @@ int main(void)
 
     rescheduleTask(TASK_GYRO, targetGyroLooptime);
     setTaskEnabled(TASK_GYRO, true);
+    setTaskEnabled(TASK_ACC, true);
 
     setTaskEnabled(TASK_SERIAL, true);
 #ifdef BEEPER
