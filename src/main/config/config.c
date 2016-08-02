@@ -1006,6 +1006,11 @@ static void validateAndFixConfig(void)
      if (!isMixerEnabled(masterConfig.mixerMode)) {
          masterConfig.mixerMode = DEFAULT_MIXER;
      }
+
+    /* Avoid timer pre-devisor overflow when selecting Multishot protocol */
+    if (masterConfig.motor_pwm_protocol == PWM_TYPE_MULTISHOT && masterConfig.motor_pwm_rate < 2000) {
+        masterConfig.motor_pwm_rate = 2000;
+    }
 }
 
 void applyAndSaveBoardAlignmentDelta(int16_t roll, int16_t pitch)
