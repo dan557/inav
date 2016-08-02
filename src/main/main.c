@@ -261,7 +261,9 @@ void init(void)
 #endif
 
     pwm_params.pwmProtocolType = masterConfig.motor_pwm_protocol;
-    pwm_params.useFastPwm = (masterConfig.motor_pwm_protocol == PWM_TYPE_ONESHOT125);
+    pwm_params.useFastPwm = (masterConfig.motor_pwm_protocol == PWM_TYPE_ONESHOT125) || 
+                            (masterConfig.motor_pwm_protocol == PWM_TYPE_ONESHOT42) ||
+                            (masterConfig.motor_pwm_protocol == PWM_TYPE_MULTISHOT);
     pwm_params.motorPwmRate = masterConfig.motor_pwm_rate;
     pwm_params.idlePulse = masterConfig.escAndServoConfig.mincommand;
     if (feature(FEATURE_3D)) {
@@ -613,9 +615,11 @@ int main(void)
 void HardFault_Handler(void)
 {
     // fall out of the sky
+    /*
     uint8_t requiredState = SYSTEM_STATE_CONFIG_LOADED | SYSTEM_STATE_MOTORS_READY;
     if ((systemState & requiredState) == requiredState) {
         stopMotors();
     }
+    */
     while (1);
 }

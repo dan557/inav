@@ -437,7 +437,7 @@ static const char * const lookupTableAuxOperator[] = {
 };
 
 static const char * const lookupTablePwmProtocol[] = {
-    "PWM", "ONESHOT125", "BRUSHED"
+    "PWM", "ONESHOT125", "ONESHOT42", "MULTISHOT", "BRUSHED"
 };
 
 typedef struct lookupTableEntry_s {

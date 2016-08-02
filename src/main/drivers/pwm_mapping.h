@@ -39,8 +39,6 @@
 #endif
 
 #define PWM_TIMER_MHZ 1
-#define ONESHOT125_TIMER_MHZ 8
-#define PWM_BRUSHED_TIMER_MHZ 8
 
 #define PULSE_1MS   (1000)      // 1ms pulse width
 
@@ -98,7 +96,7 @@ typedef enum {
     PWM_PF_SERVO = (1 << 1),
     PWM_PF_MOTOR_MODE_BRUSHED = (1 << 2),
     PWM_PF_OUTPUT_PROTOCOL_PWM = (1 << 3),
-    PWM_PF_OUTPUT_PROTOCOL_ONESHOT = (1 << 4),
+    PWM_PF_OUTPUT_PROTOCOL_FASTPWM = (1 << 4),
     PWM_PF_PPM = (1 << 5),
     PWM_PF_PWM = (1 << 6)
 } pwmPortFlags_e;

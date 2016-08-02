@@ -39,6 +39,14 @@
 #define MAX_PWM_OUTPUT_PORTS MAX_SERVOS
 #endif
 
+#define ONESHOT125_TIMER_MHZ  8
+#define ONESHOT42_TIMER_MHZ   24
+#define MULTISHOT_TIMER_MHZ   72
+#define PWM_BRUSHED_TIMER_MHZ 24
+
+#define MULTISHOT_5US_PW    (MULTISHOT_TIMER_MHZ * 5)
+#define MULTISHOT_20US_MULT (MULTISHOT_TIMER_MHZ * 20 / 1000.0f)
+
 typedef void (*pwmWriteFuncPtr)(uint8_t index, uint16_t value);  // function pointer used to write motors
 
 typedef struct {
@@ -149,6 +157,16 @@ static void pwmWriteOneShot125(uint8_t index, uint16_t value)
     *motors[index]->ccr = lrintf((float)(value * ONESHOT125_TIMER_MHZ/8.0f));
 }
 
+static void pwmWriteOneShot42(uint8_t index, uint16_t value)
+{
+    *motors[index]->ccr = lrintf((float)(value * ONESHOT42_TIMER_MHZ/24.0f));
+}
+
+static void pwmWriteMultiShot(uint8_t index, uint16_t value)
+{
+    *motors[index]->ccr = lrintf(((float)(value-1000) * MULTISHOT_20US_MULT) + MULTISHOT_5US_PW);
+}
+
 void pwmWriteMotor(uint8_t index, uint16_t value)
 {
     if (motors[index] && index < MAX_MOTORS && pwmMotorsEnabled)
@@ -195,6 +213,16 @@ void pwmMotorConfig(const timerHardware_t *timerHardware, uint8_t motorIndex, ui
         case PWM_TYPE_ONESHOT125:
             timerMhzCounter = ONESHOT125_TIMER_MHZ;
             pwmWritePtr = pwmWriteOneShot125;
+            break;
+
+        case PWM_TYPE_ONESHOT42:
+            timerMhzCounter = ONESHOT42_TIMER_MHZ;
+            pwmWritePtr = pwmWriteOneShot42;
+            break;
+
+        case PWM_TYPE_MULTISHOT:
+            timerMhzCounter = MULTISHOT_TIMER_MHZ;
+            pwmWritePtr = pwmWriteMultiShot;
             break;
 
         case PWM_TYPE_CONVENTIONAL:
